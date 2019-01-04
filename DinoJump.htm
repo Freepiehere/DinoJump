@@ -59,8 +59,16 @@
             function playerDead()   {
                 var i;
                 for (i=0;i<array.length;i++)    {
-                    
-                    if(0)    {
+                    var y_pr = player.y_loc+player.height;
+                    var x_pr = player.x_loc+player.width;
+                    var x_p = player.x_loc;
+
+                    var obstacle = array[i];
+                    var x_o = board.width-obstacle[0];
+                    var width_o = obstacle[1];
+                    var top_o = board.height-obstacle[2];
+                    //if the player hits the obstacle.
+                    if(y_pr>=top_o && x_pr > x_o && x_p < x_o+width_o)    {
                         document.getElementById("p1").innerHTML = "Dead!";
                         reset();
                         drawPlayer();
@@ -105,7 +113,7 @@
                     ctx.stroke();
                     array[i][0]+=5;
                 }
-                if(array[0][0]-board.width==array[0][1])    {
+                if(board.width-array[0][0]<=-array[0][1])    {
                     array.shift();
                 }
             }
@@ -134,6 +142,11 @@
             
             function reset()    {
                 player = {x_loc:100,y_loc:325,width:30,height:75,v_y:0,a_y:0};
+                while (array.length>0)  {
+                    array.shift();
+                }
+                const context = board.getContext('2d');
+                context.clearRect(0,0,board.width,board.height);
             }
 
             
