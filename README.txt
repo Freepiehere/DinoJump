@@ -1,6 +1,7 @@
  * Introduction
 A replication of the google chrome 'connection lost' jumping game.
 -Uses html canvas object to draw all elements of game.
+Game currently uses rectangle figures as players and obstacles.
 
  * Requirements
 -A player object drawer (start with black rectangle)
@@ -9,14 +10,7 @@ A replication of the google chrome 'connection lost' jumping game.
 -A speed-up factor
 -score counter
 
- * Recommended modules
-
- * Installation
-
- * Configuration
-
- * Troubleshooting
-
- * FAQ
-
- * Maintainers
+ * Tasks
+-Develop mechanincs for player death
+-Develop map building algorithm and obstacle design
+-Tinker with speed controls
