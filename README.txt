@@ -1,16 +1,21 @@
  * Introduction
-A replication of the google chrome 'connection lost' jumping game.
--Uses html canvas object to draw all elements of game.
-Game currently uses rectangle figures as players and obstacles.
+A replication of the google chrome 'connection lost' jumping game
+-Reworked javascript hierarchy for a less cluttered requestGameFrame function.
+-Removed textbox-dependent jumping machanism
 
  * Requirements
--A player object drawer (start with black rectangle)
--Obstacle objects (start with red rectangles)
-	-with ability to spawn new objects
--A speed-up factor
--score counter
+-A speed-up affactor
+-must add affector funcitons to decrease sphaghetti-ness. (want only 1-2 drawPlayer() calls)
 
- * Tasks
--Develop mechanincs for player death
--Develop map building algorithm and obstacle design
--Tinker with speed controls
+
+ * Recommended modules
+
+ * Installation
+
+ * Configuration
+
+ * Troubleshooting
+
+ * FAQ
+
+ * Maintainers
