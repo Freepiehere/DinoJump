@@ -8,6 +8,86 @@ var interval=null;
 var speed = 5;
 var distance = 0;
 
+
+
+function mainLoop() {
+    if( interval === null )  {
+        
+        distance = 0;
+        reset();
+        clear();
+        document.getElementById("p1").innerHTML = "Alive!";
+        var dt = 0.10;
+        interval = setInterval( function() {
+                                    requestGameFrame(dt);
+                                }, dt);
+    }
+}
+
+//Updates gameboard with respect to passing of time
+function requestGameFrame(t)    {
+    document.onkeydown = checkKey;
+    // Recieves user button-down input
+    function checkKey(e)    {
+        e = e || window.event;
+
+        if (e.keyCode == '38') {
+            userJump(e);
+        }
+        else if (e.keyCode == '40') {
+            userCrouch(e);
+        }
+    }
+    dt = t;
+    //Draw Player Function with dynamic positioning
+    //Advance Obstacles
+    //Maintain queue of Passable Scary Zones
+    //Allow future development of time step to be based on real time
+    const context = board.getContext('2d');
+    context.clearRect(0,0,board.width,board.height);
+
+    printScore();
+    distance += speed;
+
+    updatePlayer();
+    updateObstacles();
+    
+    playerDead();
+}
+
+function printScore()   {
+    var ctx = board.getContext("2d");
+    ctx.font = "30px Arial";
+    ctx.fillText(distance, 10, 50); 
+
+}
+
+function updatePlayer()   {
+    if(player.v_y!==0 || player.y_loc<board.height-player.height)  {
+        player.y_loc += -Math.round(player.v_y*dt);
+        player.v_y += player.a*dt;
+    }
+    if(player.y_loc>=board.height-player.height+1)    {
+        player.y_loc = board.height-player.height;
+        player.v_y=0;
+        player.a_y=0;
+    }
+    drawPlayer();
+}
+function drawPlayer()   {
+    var canvas = document.getElementById('gameboard');
+    var ctx = canvas.getContext("2d");
+    ctx.beginPath();
+    ctx.fillStyle='black';
+    ctx.fillRect(player.x_loc,player.y_loc,player.width,player.height);
+    
+    ctx.stroke();
+}
+
+function updateObstacles()  {
+    throwObstacle();
+    drawObstacles();
+}
 //generates obstacles
 function throwObstacle()    {
     //x_pos,width,height
@@ -32,47 +112,21 @@ function throwObstacle()    {
         array.push(obstacle_4);
     }
 }
-
-function mainLoop() {
-    if( interval === null )  {
-        
-        distance = 0;
-        reset();
-        
-        document.getElementById("p1").innerHTML = "Alive!";
-        var dt = 0.10;
-        interval = setInterval( function() {
-                                    requestGameFrame(dt);
-                                }, dt);
+function drawObstacles() {
+    var i;
+    for (i=0;i<array.length;i++)    {
+        var obstacle = array[i];
+        var canvas = document.getElementById('gameboard');
+        var ctx = canvas.getContext("2d");
+        ctx.beginPath();
+        ctx.fillStyle = "#FF0000";
+        ctx.fillRect(board.width-obstacle[0],board.height-obstacle[2],obstacle[1],obstacle[2]);
+        ctx.stroke();
+        array[i][0]+=speed;
     }
-}
-
-function printScore()   {
-    var ctx = board.getContext("2d");
-    ctx.font = "30px Arial";
-    ctx.fillText(distance, 10, 50); 
-
-}
-//Updates gameboard with respect to passing of time
-function requestGameFrame(t)    {
-    dt = t;
-    //Draw Player Function with dynamic positioning
-    //Advance Obstacles
-    //Maintain queue of Passable Scary Zones
-    //Allow future development of time step to be based on real time
-    const context = board.getContext('2d');
-    context.clearRect(0,0,board.width,board.height);
-
-    printScore();
-    distance += speed;
-
-    throwObstacle();
-    updatePlayer();
-
-    drawPlayer();
-    drawObstacles();
-    
-    playerDead();
+    if(board.width-array[0][0]<=-array[0][1])    {
+        array.shift();
+    }
 }
 
 function playerDead()   {
@@ -94,6 +148,7 @@ function playerDead()   {
 }
 
 function gameOver() {
+    clear();
     document.getElementById("p1").innerHTML = "Dead!";
     
     drawObstacles();
@@ -103,65 +158,19 @@ function gameOver() {
     interval = null;
 }
 
-// Recieves user button-down input
-function userJump(event)  {
-    var x = event.keyCode;
-    if (x==38)  {
-        initiateJump();
-        //Crouch
-    } else if (x == 40) {
-        w = player.width;
-        player.width = player.height;
-        player.height = w;
-        player.y_loc = player.y_loc+(player.width-player.height);
-        drawPlayer();
-    }
-}
-
 // Checks if player is not already jumping and submits a jump request
-function initiateJump() {
+function userJump()  {
     if(player.y_loc == board.height-player.height) {
         player.v_y = 80;
         player.a = -15;
-    }
-}
-function drawObstacles() {
-    var i;
-    for (i=0;i<array.length;i++)    {
-        var obstacle = array[i];
-        var canvas = document.getElementById('gameboard');
-        var ctx = canvas.getContext("2d");
-        ctx.beginPath();
-        ctx.fillStyle = "#FF0000";
-        ctx.fillRect(board.width-obstacle[0],board.height-obstacle[2],obstacle[1],obstacle[2]);
-        ctx.stroke();
-        array[i][0]+=speed;
-    }
-    if(board.width-array[0][0]<=-array[0][1])    {
-        array.shift();
-    }
+    }   
 }
 
-function drawPlayer()   {
-    var canvas = document.getElementById('gameboard');
-    var ctx = canvas.getContext("2d");
-    ctx.beginPath();
-    ctx.fillStyle='black';
-    ctx.fillRect(player.x_loc,player.y_loc,player.width,player.height);
-    
-    ctx.stroke();
-}
-
-function updatePlayer()   {
-    if(player.v_y!==0 || player.y_loc<board.height-player.height)  {
-        player.y_loc += -Math.round(player.v_y*dt);
-        player.v_y += player.a*dt;
-    }
-    if(player.y_loc>=board.height-player.height+1)    {
-        player.y_loc = board.height-player.height;
-        player.v_y=0;
-        player.a_y=0;
-    }
+function userCrouch()   {
+    w = player.width;
+    player.width = player.height;
+    player.height = w;
+    player.y_loc = player.y_loc+(player.width-player.height);
 }
 
 function reset()    {
@@ -169,6 +178,8 @@ function reset()    {
     while (array.length>0)  {
         array.shift();
     }
+}
+function clear()    {
     const context = board.getContext('2d');
     context.clearRect(0,0,board.width,board.height);
 }
