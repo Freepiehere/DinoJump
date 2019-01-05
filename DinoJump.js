@@ -8,8 +8,6 @@ var interval=null;
 var speed = 5;
 var distance = 0;
 
-
-
 function mainLoop() {
     if( interval === null )  {
         
@@ -58,7 +56,9 @@ function requestGameFrame(t)    {
 function printScore()   {
     var ctx = board.getContext("2d");
     ctx.font = "30px Arial";
+    ctx.fillStyle = 'black';
     ctx.fillText(distance, 10, 50); 
+    ctx.stroke();
 
 }
 
@@ -153,6 +153,7 @@ function gameOver() {
     
     drawObstacles();
     drawPlayer();
+    printScore();
     
     clearInterval(interval);
     interval = null;
