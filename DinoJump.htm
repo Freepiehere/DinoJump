@@ -1,10 +1,22 @@
 <!DOCTYPE html>
 <html>
+    <style>
+        canvas {
+            opacity: 1.0;
+            filter: alpha(opacity=100);
+        }
+        img {
+            opacity: 0.5;
+            filter: alpha(opacity=50);
+        }
+        
+    </style>
     <body>
         <p id="p1">Alive</p>
-        <div id ="myContainer">
-            <canvas id="gameboard" width = "1518" height = "400" style="border:1px solid #000000;"></canvas>
-        </div>
+        <canvas id="gameboard" width = "1518" height = "400" style="border:1px solid">
+            <img id = 'player' src = "Dino.png"/>
+        </canvas>
+        
 
         <input type="button" onclick="mainLoop()" value="Begin!" />
 
