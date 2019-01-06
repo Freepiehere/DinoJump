@@ -115,6 +115,7 @@ function drawPlayer()   {
     
     const ctx = board.getContext('2d');
     ctx.beginPath();
+    ctx.fillStyle = 'black';
     //image.style.opacity = 0.7;
     //ctx.drawImage(image,player.x_loc,player.y_loc,player.width,player.height);
     ctx.fillRect(player.x_loc,player.y_loc,player.width,player.height);
@@ -157,8 +158,10 @@ function drawObstacles() {
     for (i=0;i<array.length;i++)    {
         var obstacle = array[i];
         var ctx = board.getContext("2d");
+        ctx.beginPath();
         ctx.fillStyle = "#FF0000";
         ctx.fillRect(board.width-obstacle[0],board.height-obstacle[2],obstacle[1],obstacle[2]);
+        ctx.stroke();
         array[i][0]+=speed;
     }
     if(board.width-array[0][0]<=-array[0][1])    {
