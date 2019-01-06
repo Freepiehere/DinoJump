@@ -3,7 +3,7 @@ var array = [];
 var board = document.getElementById("gameboard");
 //1517 being one less than the board width
 var y_loc = 0;
-var player = {x_loc:100,y_loc:310,width:60,height:90,v_y:0,a_y:0};
+var player = {x_loc:100,y_loc:325,width:30,height:75,v_y:0,a_y:0};
 var dt = 0;
 var interval=null;
 var speed = 5;
@@ -99,9 +99,9 @@ function drawPlayer()   {
     const ctx = board.getContext('2d');
     ctx.beginPath();
     const image = document.getElementById('player');
-    image.style.opacity = 0.7;
-    ctx.drawImage(image,player.x_loc,player.y_loc,player.width,player.height);
-    
+    //image.style.opacity = 0.7;
+    //ctx.drawImage(image,player.x_loc,player.y_loc,player.width,player.height);
+    ctx.fillRect(player.x_loc,player.y_loc,player.width,player.height);
     document.getElementById("player").setAttribute("style","opacity:0.5; -moz-opacity:0.5; filter:alpha(opacity=50)");
 
     ctx.stroke();
