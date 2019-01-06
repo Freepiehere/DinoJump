@@ -2,6 +2,9 @@
 A replication of the google chrome 'connection lost' jumping game
 -Removed textbox-dependent jumping machanism
 -Reworked javascript hierarchy for a less cluttered requestGameFrame function.
+-Fixed Score color and disappearing beyond death bugs.
+-Included Dinosaur (Yohsi) Icon
+-Added leniency mechanic loosening restrictions on pinpint accuracy
  Hierarchy:
  +mainLoop
 	+reset
@@ -23,5 +26,5 @@ A replication of the google chrome 'connection lost' jumping game
 
  * Tasks
 -A speed-up affactor
--must add affector funcitons to decrease sphaghetti-ness. (want only 1-2 drawPlayer() calls)
-
+-Must add affector funcitons to decrease sphaghetti-ness. (want only 1-2 drawPlayer() calls)
+-High Score Counter

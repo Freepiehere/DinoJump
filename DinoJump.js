@@ -1,3 +1,4 @@
+
 var array = [];
 var board = document.getElementById("gameboard");
 //1517 being one less than the board width
@@ -7,15 +8,15 @@ var dt = 0;
 var interval=null;
 var speed = 5;
 var distance = 0;
-
-
+drawPlayer();
 
 function mainLoop() {
     if( interval === null )  {
-        
         distance = 0;
         reset();
-        clear();
+        drawBackground();
+        
+
         document.getElementById("p1").innerHTML = "Alive!";
         var dt = 0.10;
         interval = setInterval( function() {
@@ -23,6 +24,19 @@ function mainLoop() {
                                 }, dt);
     }
 }
+
+function drawBackground()   {
+    var ctx = board.getContext('2d');
+    ctx.beginPath();
+    ctx.fillStyle = "white";
+    
+    //for player testing
+    //ctx.fillStyle = "rgb(218,207,182)";
+    
+    ctx.fillRect(0,0,board.width,board.height);
+    ctx.stroke();
+}
+
 
 //Updates gameboard with respect to passing of time
 function requestGameFrame(t)    {
@@ -43,12 +57,10 @@ function requestGameFrame(t)    {
     //Advance Obstacles
     //Maintain queue of Passable Scary Zones
     //Allow future development of time step to be based on real time
-    const context = board.getContext('2d');
-    context.clearRect(0,0,board.width,board.height);
-
+    drawBackground();
     printScore();
     distance += speed;
-
+    
     updatePlayer();
     updateObstacles();
     
@@ -58,7 +70,9 @@ function requestGameFrame(t)    {
 function printScore()   {
     var ctx = board.getContext("2d");
     ctx.font = "30px Arial";
+    ctx.fillStyle = 'black';
     ctx.fillText(distance, 10, 50); 
+    ctx.stroke();
 
 }
 
@@ -75,13 +89,22 @@ function updatePlayer()   {
     drawPlayer();
 }
 function drawPlayer()   {
-    var canvas = document.getElementById('gameboard');
+    /*var canvas = document.getElementById('gameboard');
     var ctx = canvas.getContext("2d");
     ctx.beginPath();
     ctx.fillStyle='black';
     ctx.fillRect(player.x_loc,player.y_loc,player.width,player.height);
+    ctx.stroke();*/
     
+    const ctx = board.getContext('2d');
+    ctx.beginPath();
+    //image.style.opacity = 0.7;
+    //ctx.drawImage(image,player.x_loc,player.y_loc,player.width,player.height);
+    ctx.fillRect(player.x_loc,player.y_loc,player.width,player.height);
+
     ctx.stroke();
+
+
 }
 
 function updateObstacles()  {
@@ -116,12 +139,9 @@ function drawObstacles() {
     var i;
     for (i=0;i<array.length;i++)    {
         var obstacle = array[i];
-        var canvas = document.getElementById('gameboard');
-        var ctx = canvas.getContext("2d");
-        ctx.beginPath();
+        var ctx = board.getContext("2d");
         ctx.fillStyle = "#FF0000";
         ctx.fillRect(board.width-obstacle[0],board.height-obstacle[2],obstacle[1],obstacle[2]);
-        ctx.stroke();
         array[i][0]+=speed;
     }
     if(board.width-array[0][0]<=-array[0][1])    {
@@ -130,6 +150,7 @@ function drawObstacles() {
 }
 
 function playerDead()   {
+    var leniency = 5;
     var i;
     for (i=0;i<array.length;i++)    {
         var y_pr = player.y_loc+player.height;
@@ -141,18 +162,19 @@ function playerDead()   {
         var width_o = obstacle[1];
         var top_o = board.height-obstacle[2];
         //if the player hits the obstacle.
-        if(y_pr>=top_o && x_pr > x_o && x_p < x_o+width_o)    {
+        if(y_pr>=top_o+leniency && x_pr > x_o+leniency && x_p+leniency < x_o+width_o)    {
             gameOver();
         }
     }
 }
 
 function gameOver() {
-    clear();
+    drawBackground();
     document.getElementById("p1").innerHTML = "Dead!";
     
     drawObstacles();
     drawPlayer();
+    printScore();
     
     clearInterval(interval);
     interval = null;
@@ -174,12 +196,13 @@ function userCrouch()   {
 }
 
 function reset()    {
-    player = {x_loc:100,y_loc:325,width:30,height:75,v_y:0,a_y:0};
+    if(player.width>player.height)  {
+        userCrouch();
+        player.y_loc = board.height-player.height;
+    }
+    
     while (array.length>0)  {
         array.shift();
     }
-}
-function clear()    {
-    const context = board.getContext('2d');
-    context.clearRect(0,0,board.width,board.height);
+    
 }
