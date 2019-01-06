@@ -5,6 +5,7 @@ A replication of the google chrome 'connection lost' jumping game
 -Fixed Score color and disappearing beyond death bugs.
 -Included Dinosaur (Yohsi) Icon
 -Added leniency mechanic loosening restrictions on pinpint accuracy
+-Added highScore display
  Hierarchy:
  +mainLoop
 	+reset

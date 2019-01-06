@@ -59,6 +59,9 @@ function requestGameFrame(t)    {
     //Allow future development of time step to be based on real time
     drawBackground();
     printScore();
+    if(highScore)   {
+        printHighScore();
+    }
     distance += speed;
     
     updatePlayer();
@@ -66,7 +69,6 @@ function requestGameFrame(t)    {
     
     playerDead();
 }
-
 function printScore()   {
     var ctx = board.getContext("2d");
     ctx.font = "30px Arial";
@@ -75,7 +77,23 @@ function printScore()   {
     ctx.stroke();
 
 }
-
+var highScore;
+function printHighScore()   {
+    var ctx = board.getContext("2d");
+    ctx.font = "15px Arial";
+    ctx.fillStyle = 'black';
+    ctx.fillText("high score: ".concat(highScore.toString()),10,75);
+    ctx.stroke();
+}
+function updateHighScore()  {
+    if(highScore && distance>highScore)   {
+        highScore = distance;
+        printHighScore();
+    }   else if(!highScore) {
+        highScore = distance;
+        printHighScore();
+    }
+}
 function updatePlayer()   {
     if(player.v_y!==0 || player.y_loc<board.height-player.height)  {
         player.y_loc += -Math.round(player.v_y*dt);
@@ -174,6 +192,7 @@ function gameOver() {
     
     drawObstacles();
     drawPlayer();
+    updateHighScore();
     printScore();
     
     clearInterval(interval);
