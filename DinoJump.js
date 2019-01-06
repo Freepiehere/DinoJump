@@ -59,6 +59,9 @@ function requestGameFrame(t)    {
     //Allow future development of time step to be based on real time
     drawBackground();
     printScore();
+    if(highScore)   {
+        printHighScore();
+    }
     distance += speed;
     
     updatePlayer();
@@ -66,7 +69,6 @@ function requestGameFrame(t)    {
     
     playerDead();
 }
-
 function printScore()   {
     var ctx = board.getContext("2d");
     ctx.font = "30px Arial";
@@ -75,7 +77,22 @@ function printScore()   {
     ctx.stroke();
 
 }
-
+var highScore;
+function printHighScore()   {
+    var ctx = board.getContext("2d");
+    ctx.font = "15px Arial";
+    ctx.fillStyle = 'black';
+    ctx.fillText("high score: ".concat(highScore.toString()),10,75);
+    ctx.stroke();
+}
+function updateHighScore()  {
+    if(highScore && distance>highScore)   {
+        highScore = distance;
+    }   else if(!highScore) {
+        highScore = distance;
+    }
+    printHighScore();
+}
 function updatePlayer()   {
     if(player.v_y!==0 || player.y_loc<board.height-player.height)  {
         player.y_loc += -Math.round(player.v_y*dt);
@@ -98,6 +115,7 @@ function drawPlayer()   {
     
     const ctx = board.getContext('2d');
     ctx.beginPath();
+    ctx.fillStyle = 'black';
     //image.style.opacity = 0.7;
     //ctx.drawImage(image,player.x_loc,player.y_loc,player.width,player.height);
     ctx.fillRect(player.x_loc,player.y_loc,player.width,player.height);
@@ -140,8 +158,10 @@ function drawObstacles() {
     for (i=0;i<array.length;i++)    {
         var obstacle = array[i];
         var ctx = board.getContext("2d");
+        ctx.beginPath();
         ctx.fillStyle = "#FF0000";
         ctx.fillRect(board.width-obstacle[0],board.height-obstacle[2],obstacle[1],obstacle[2]);
+        ctx.stroke();
         array[i][0]+=speed;
     }
     if(board.width-array[0][0]<=-array[0][1])    {
@@ -174,6 +194,7 @@ function gameOver() {
     
     drawObstacles();
     drawPlayer();
+    updateHighScore();
     printScore();
     
     clearInterval(interval);
