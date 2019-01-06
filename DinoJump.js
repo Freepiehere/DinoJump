@@ -101,7 +101,6 @@ function drawPlayer()   {
     //image.style.opacity = 0.7;
     //ctx.drawImage(image,player.x_loc,player.y_loc,player.width,player.height);
     ctx.fillRect(player.x_loc,player.y_loc,player.width,player.height);
-    document.getElementById("player").setAttribute("style","opacity:0.5; -moz-opacity:0.5; filter:alpha(opacity=50)");
 
     ctx.stroke();
 
