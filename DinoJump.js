@@ -88,11 +88,10 @@ function printHighScore()   {
 function updateHighScore()  {
     if(highScore && distance>highScore)   {
         highScore = distance;
-        printHighScore();
     }   else if(!highScore) {
         highScore = distance;
-        printHighScore();
     }
+    printHighScore();
 }
 function updatePlayer()   {
     if(player.v_y!==0 || player.y_loc<board.height-player.height)  {
