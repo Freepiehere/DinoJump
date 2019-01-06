@@ -98,7 +98,6 @@ function drawPlayer()   {
     
     const ctx = board.getContext('2d');
     ctx.beginPath();
-    const image = document.getElementById('player');
     //image.style.opacity = 0.7;
     //ctx.drawImage(image,player.x_loc,player.y_loc,player.width,player.height);
     ctx.fillRect(player.x_loc,player.y_loc,player.width,player.height);
