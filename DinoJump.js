@@ -13,6 +13,10 @@ drawPlayer();
 function mainLoop() {
     if( interval === null )  {
         distance = 0;
+        if(highScore && highScore >38000)   {
+            distance = 38000;
+        } 
+        omega = 0;
         reset();
         drawBackground();
         
@@ -132,10 +136,18 @@ function updateObstacles()  {
 //generates obstacles
 function throwObstacle()    {
     //x_pos,width,height
-    var obstacle_1 = [0,100,50];
-    var obstacle_2 = [0,50,50];
-    var obstacle_3 = [0,100,100];
-    var obstacle_4 = [0,50,100];
+    
+    if (distance<20000) {
+        levelOne();
+    }   else    {
+        levelTwo();
+    }
+}
+function levelOne() {
+    var obstacle_1 = [0,0,100,50];
+    var obstacle_2 = [0,0,50,50];
+    var obstacle_3 = [0,0,100,100];
+    var obstacle_4 = [0,0,50,100];
     var freq_1 = 1000;
     var freq_2 = 1750;
     var freq_3 = 3500;
@@ -153,6 +165,64 @@ function throwObstacle()    {
         array.push(obstacle_4);
     }
 }
+
+var omega = 0;
+var nu = 5;
+function levelTwo()  {
+    var obstacle_1 = [0,0,100,50];
+    var obst_1 = [0,Math.min(player.width,player.height)+10,100,50];
+
+    var obstacle_2 = [0,0,50,50];
+    var obst_2 = [0,Math.min(player.width,player.height)+10,50,50];
+
+    var obstacle_3 = [0,0,100,100];
+    var obst_3 = [0,Math.min(player.width,player.height)+10,100,100];
+
+    var obstacle_4 = [0,0,50,100];
+    var obst_4 = [0,Math.min(player.width,player.height)+10,50,100];
+
+    var freq_1 = 1000;
+    var freq_2 = 1750;
+    var freq_3 = 3500;
+    var freq_4 = 4250;
+    if (distance%freq_1==0)  {
+        if(omega%nu!==0)   {
+            array.push(obstacle_1);
+        }   else    {
+            nu += 1;
+            array.push(obst_1);
+        }
+        omega+=1;
+    }
+    if (distance%freq_2==0) {
+        if(omega%nu!==0)   {
+            array.push(obstacle_2);
+        }   else    {
+            nu += 1;
+            array.push(obst_2);
+        }
+        omega+=1;
+    }
+    if (distance%freq_3==0) {
+        if(omega%nu!==0)   {
+            array.push(obstacle_3);
+        }   else    {
+            nu += 1;
+            array.push(obst_3);
+        }
+        omega+=1;
+    }
+    if (distance%freq_4==0) {
+        if(omega%nu!==0)   {
+            array.push(obstacle_4);
+        }   else    {
+            nu += 1;
+            array.push(obst_4);
+        }
+        omega+=1;
+    }
+    nu = 5;
+}
 function drawObstacles() {
     var i;
     for (i=0;i<array.length;i++)    {
@@ -160,11 +230,11 @@ function drawObstacles() {
         var ctx = board.getContext("2d");
         ctx.beginPath();
         ctx.fillStyle = "#FF0000";
-        ctx.fillRect(board.width-obstacle[0],board.height-obstacle[2],obstacle[1],obstacle[2]);
+        ctx.fillRect(board.width-obstacle[0],board.height-obstacle[3]-obstacle[1],obstacle[2],obstacle[3]);
         ctx.stroke();
         array[i][0]+=speed;
     }
-    if(board.width-array[0][0]<=-array[0][1])    {
+    if(board.width-array[0][0]<=-array[0][2])    {
         array.shift();
     }
 }
@@ -174,15 +244,17 @@ function playerDead()   {
     var i;
     for (i=0;i<array.length;i++)    {
         var y_pr = player.y_loc+player.height;
+        var y_p = player.y_loc;
         var x_pr = player.x_loc+player.width;
         var x_p = player.x_loc;
 
         var obstacle = array[i];
         var x_o = board.width-obstacle[0];
-        var width_o = obstacle[1];
-        var top_o = board.height-obstacle[2];
+        var width_o = obstacle[2];
+        var top_o = board.height-obstacle[3]-obstacle[1];
+        var bottom_o = board.height-obstacle[1];
         //if the player hits the obstacle.
-        if(y_pr>=top_o+leniency && x_pr > x_o+leniency && x_p+leniency < x_o+width_o)    {
+        if(y_pr>=top_o+leniency && y_p <= bottom_o && x_pr >= x_o+leniency && x_p+leniency < x_o+width_o)    {
             gameOver();
         }
     }

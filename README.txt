@@ -5,6 +5,8 @@ A replication of the google chrome 'connection lost' jumping game
 -Fixed Score color and disappearing beyond death bugs.
 -Included Dinosaur (Yohsi) Icon
 -Added leniency mechanic loosening restrictions on pinpint accuracy
+-Added highScore display
+-Added "need" for crouch mechanic
  Hierarchy:
  +mainLoop
 	+reset
@@ -24,7 +26,3 @@ A replication of the google chrome 'connection lost' jumping game
 			+userCrouch
 
 
- * Tasks
--A speed-up affactor
--Must add affector funcitons to decrease sphaghetti-ness. (want only 1-2 drawPlayer() calls)
--High Score Counter
